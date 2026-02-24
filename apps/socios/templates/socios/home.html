@@ -1,0 +1,16 @@
+<h1>Listado de socios</h1>
+
+<table>
+<tr>
+  <th>Nombre</th>
+  <th>Apellidos</th>
+  <th>DNI</th>
+</tr>
+{% for socio in socios %}
+<tr>
+  <td>{{ socio.nombre }}</td>
+  <td>{{ socio.apellidos }}</td>
+  <td>{{ socio.dni }}</td>
+</tr>
+{% endfor %}
+</table>
