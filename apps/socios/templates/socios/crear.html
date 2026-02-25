@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-4">
+    <h2>Alta de socio</h2>
+
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.apellidos.label_tag }}
+            {{ form.apellidos }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.dni.label_tag }}
+            {{ form.dni }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.telefono.label_tag }}
+            {{ form.telefono }}
+        </div>
+
+        <div class="form-check mb-3">
+            {{ form.estado }}
+            {{ form.estado.label_tag }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Guardar socio
+        </button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,28 +1,68 @@
-<h1>Listado de socios</h1>
+{% extends 'base.html' %}
+{% block content %}
 
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Apellidos</th>
-      <th>DNI</th>
-      <th>Email</th>
-      <th>Estado</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for s in socios %}
-    <tr>
-      <td>{{ s.nombre }}</td>
-      <td>{{ s.apellidos }}</td>
-      <td>{{ s.dni }}</td>
-      <td>{{ s.email }}</td>
-      <td>{% if s.estado %}Activo{% else %}Baja{% endif %}</td>
-    </tr>
-  {% empty %}
-    <tr>
-      <td colspan="5">No hay socios</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="container my-4">
+    <h2 class="mb-4">Listado de socios</h2>
+    <!-- 👇 Botón de alta -->
+    <a href="{% url 'crear_socio' %}" class="btn btn-success mb-3">
+        + Nuevo socio
+    </a>
+    <!-- Tabla para desktop -->
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>DNI</th>
+                    <th>Email</th>
+                    <th>Estado</th>
+                    <th>Alta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for socio in socios %}
+                <tr>
+                    <td>{{ socio.nombre }}</td>
+                    <td>{{ socio.apellidos }}</td>
+                    <td>{{ socio.dni }}</td>
+                    <td>{{ socio.email }}</td>
+                    <td>
+                        {% if socio.estado %}
+                        <span class="badge bg-success">Activo</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Baja</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ socio.fecha_alta }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Cards para móvil -->
+    <div class="d-md-none">
+        {% for socio in socios %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ socio.nombre }} {{ socio.apellidos }}</h5>
+                <p class="card-text">
+                    <strong>DNI:</strong> {{ socio.dni }}<br>
+                    <strong>Email:</strong> {{ socio.email }}<br>
+                    <strong>Estado:</strong>
+                    {% if socio.estado %}
+                    <span class="badge bg-success">Activo</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Baja</span>
+                    {% endif %}
+                </p>
+                <small class="text-muted">Alta: {{ socio.fecha_alta }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
