@@ -3,7 +3,10 @@
 
 <div class="container my-4">
     <h2 class="mb-4">Listado de socios</h2>
-
+    <!-- 👇 Botón de alta -->
+    <a href="{% url 'crear_socio' %}" class="btn btn-success mb-3">
+        + Nuevo socio
+    </a>
     <!-- Tabla para desktop -->
     <div class="table-responsive d-none d-md-block">
         <table class="table table-striped table-hover">
@@ -45,7 +48,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ socio.nombre }} {{ socio.apellidos }}</h5>
                 <p class="card-text">
-                    <strong>DNI2:</strong> {{ socio.dni }}<br>
+                    <strong>DNI:</strong> {{ socio.dni }}<br>
                     <strong>Email:</strong> {{ socio.email }}<br>
                     <strong>Estado:</strong>
                     {% if socio.estado %}
