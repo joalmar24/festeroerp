@@ -4,7 +4,7 @@ from .models import Socio
 from .forms import SocioForm
 
 def home(request):
-    socios = Socio.objects.all()
+    socios = Socio.objects.filter(estado=True)
     return render(request, 'socios/home.html', {'socios': socios})
 
 def crear_socio(request):
@@ -31,5 +31,6 @@ def editar_socio(request, pk):
     return render(request, 'socios/crear.html', {'form': form})
 def eliminar_socio(request, pk):
     socio = get_object_or_404(Socio, pk=pk)
-    socio.delete()
+    socio.estado = False
+    socio.save()
     return redirect('home')
