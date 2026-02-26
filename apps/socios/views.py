@@ -29,7 +29,7 @@ def editar_socio(request, pk):
         form = SocioForm(instance=socio)
 
     return render(request, 'socios/crear.html', {'form': form})
-def eliminar_socio(request, pk):
+def baja_socio(request, pk):
     socio = get_object_or_404(Socio, pk=pk)
     socio.estado = False
     socio.save()
