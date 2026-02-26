@@ -4,14 +4,13 @@ from django.contrib import admin
 from .models import Socio, TipoSocio, Condicion
 
 @admin.register(TipoSocio)
-class TipoSocioAdmin(admin.ModelAdmin):
+class TipoAdmin(admin.ModelAdmin):
     list_display = ('nombre',)
-    search_fields = ('nombre',)
 
 @admin.register(Condicion)
 class CondicionAdmin(admin.ModelAdmin):
-    list_display = ('nombre',)
-    search_fields = ('nombre',)
+    list_display = ('nombre', 'tipo')
+    list_filter = ('tipo',)
 
 @admin.register(Socio)
 class SocioAdmin(admin.ModelAdmin):
