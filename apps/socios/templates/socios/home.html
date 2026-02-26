@@ -18,6 +18,7 @@
                     <th>Email</th>
                     <th>Estado</th>
                     <th>Alta</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,18 @@
                         {% endif %}
                     </td>
                     <td>{{ socio.fecha_alta }}</td>
+                    <td>
+                    <a href="{% url 'editar_socio' socio.id %}" 
+                    class="btn btn-sm btn-warning">
+                    Editar
+                    </a>
+
+                    <a href="{% url 'eliminar_socio' socio.id %}" 
+                    class="btn btn-sm btn-danger"
+                    onclick="return confirm('¿Seguro que quieres eliminar este socio?')">
+                        Eliminar
+                    </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -58,6 +71,18 @@
                     {% endif %}
                 </p>
                 <small class="text-muted">Alta: {{ socio.fecha_alta }}</small>
+                <div class="mt-2">
+                    <a href="{% url 'editar_socio' socio.id %}" 
+                    class="btn btn-sm btn-warning">
+                        Editar
+                    </a>
+
+                    <a href="{% url 'eliminar_socio' socio.id %}" 
+                    class="btn btn-sm btn-danger"
+                    onclick="return confirm('¿Seguro que quieres eliminar este socio?')">
+                        Eliminar
+                    </a>
+                </div>
             </div>
         </div>
         {% endfor %}
