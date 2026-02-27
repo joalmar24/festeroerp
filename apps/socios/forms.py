@@ -1,5 +1,5 @@
 from django import forms
-from .models import Socio
+from .models import Socio, Condicion
 
 
 def clean(self):
@@ -27,3 +27,17 @@ class SocioForm(forms.ModelForm):
             'condicion': forms.Select(attrs={'class': 'form-select'}),
             'estado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # si ya hay tipo seleccionado, filtramos condiciones
+        if 'tipo' in self.data:
+            try:
+                tipo_id = int(self.data.get('tipo'))
+                self.fields['condicion'].queryset = Condicion.objects.filter(tipo_id=tipo_id)
+            except:
+                pass
+        elif self.instance.pk and self.instance.tipo:
+            self.fields['condicion'].queryset = self.instance.tipo.condiciones.all()
+        else:
+            self.fields['condicion'].queryset = Condicion.objects.none()
