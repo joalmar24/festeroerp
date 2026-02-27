@@ -4,6 +4,10 @@ from django.core.exceptions import ValidationError
 
 class TipoSocio(models.Model):
     nombre = models.CharField(max_length=100)
+    requiere_condicion = models.BooleanField(
+        default=False,
+        help_text="Si este tipo necesita condición obligatoria"
+    )
 
     def __str__(self):
         return self.nombre

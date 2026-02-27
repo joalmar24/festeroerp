@@ -28,6 +28,20 @@ class SocioForm(forms.ModelForm):
             'estado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        tipo = cleaned_data.get("tipo")
+        condicion = cleaned_data.get("condicion")
+
+        if tipo and tipo.requiere_condicion and not condicion:
+            self.add_error(
+                'condicion',
+                'Este tipo de socio requiere una condición.'
+            )
+
+        return cleaned_data
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

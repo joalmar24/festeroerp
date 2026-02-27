@@ -42,7 +42,7 @@
         {{ form.tipo }}
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" id="condicion-wrapper">
             {{ form.condicion.label_tag }}
             {{ form.condicion }}
         </div>
@@ -65,36 +65,49 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const tipoSelect = document.getElementById("id_tipo");
     const condicionSelect = document.getElementById("id_condicion");
+    const condicionWrapper = document.getElementById("condicion-wrapper");
 
     function cargarCondiciones(tipoId) {
+
         if (!tipoId) {
-            condicionSelect.innerHTML = '<option value="">---------</option>';
+            condicionWrapper.style.display = "none";
+            condicionSelect.innerHTML = "";
             return;
         }
 
         fetch(`/ajax/cargar-condiciones/?tipo_id=${tipoId}`)
             .then(response => response.json())
             .then(data => {
-                condicionSelect.innerHTML = '<option value="">---------</option>';
 
-                data.forEach(condicion => {
-                    const option = document.createElement("option");
-                    option.value = condicion.id;
-                    option.text = condicion.nombre;
-                    condicionSelect.appendChild(option);
-                });
+                condicionSelect.innerHTML = "";
+
+                if (data.length === 0) {
+                    condicionWrapper.style.display = "none";
+                } else {
+                    condicionWrapper.style.display = "block";
+
+                    const emptyOption = document.createElement("option");
+                    emptyOption.text = "---------";
+                    emptyOption.value = "";
+                    condicionSelect.add(emptyOption);
+
+                    data.forEach(condicion => {
+                        const option = document.createElement("option");
+                        option.value = condicion.id;
+                        option.text = condicion.nombre;
+                        condicionSelect.add(option);
+                    });
+                }
+
             });
     }
 
-    // Cuando cambia el tipo
+    // Ocultar al cargar la página
+    condicionWrapper.style.display = "none";
+
     tipoSelect.addEventListener("change", function() {
         cargarCondiciones(this.value);
     });
-
-    // Cargar si ya hay tipo seleccionado al abrir
-    if (tipoSelect.value) {
-        cargarCondiciones(tipoSelect.value);
-    }
 
 });
 </script>
