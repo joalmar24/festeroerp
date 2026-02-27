@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 
 class TipoSocio(models.Model):
     nombre = models.CharField(max_length=100)
@@ -35,5 +37,10 @@ class Socio(models.Model):
     )
     fecha_alta = models.DateField(auto_now_add=True)
     estado = models.BooleanField(default=True)  # activo / baja lógica
+    
+    def clean(self):
+        if self.condicion and self.condicion.tipo != self.tipo:
+            raise ValidationError("La condición no pertenece al tipo seleccionado.")
+
     def __str__(self):
         return f"{self.nombre} {self.apellidos}"

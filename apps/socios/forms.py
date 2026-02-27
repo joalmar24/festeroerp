@@ -27,17 +27,51 @@ class SocioForm(forms.ModelForm):
             'condicion': forms.Select(attrs={'class': 'form-select'}),
             'estado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # si ya hay tipo seleccionado, filtramos condiciones
+        # Por defecto NO hay condiciones
+        self.fields['condicion'].queryset = Condicion.objects.none()
+        self.fields['condicion'].help_text = (
+            "Seleccione primero un Tipo y guarde para cargar las condiciones."
+        )
+        # EL STYLE
+        if self.fields['condicion'].disabled:
+            self.fields['condicion'].widget.attrs['style'] = 'background:#eee;'
+
+        # --- EDITANDO socio existente ---
+        if self.instance.pk and self.instance.tipo:
+            self.fields['condicion'].queryset = Condicion.objects.filter(
+                tipo=self.instance.tipo
+            )
+            self.fields['condicion'].disabled = False
+            self.fields['condicion'].help_text = ""
+
+        # --- POST (cuando cambias tipo) ---
         if 'tipo' in self.data:
             try:
                 tipo_id = int(self.data.get('tipo'))
-                self.fields['condicion'].queryset = Condicion.objects.filter(tipo_id=tipo_id)
+                self.fields['condicion'].queryset = Condicion.objects.filter(
+                    tipo_id=tipo_id
+                )
+                self.fields['condicion'].disabled = False
+                self.fields['condicion'].help_text = ""
             except:
                 pass
-        elif self.instance.pk and self.instance.tipo:
-            self.fields['condicion'].queryset = self.instance.tipo.condiciones.all()
-        else:
-            self.fields['condicion'].queryset = Condicion.objects.none()
+
+
+#    def __init__(self, *args, **kwargs):
+#        super().__init__(*args, **kwargs) 
+
+       # si ya hay tipo seleccionado, filtramos condiciones
+#        if 'tipo' in self.data:
+#            try:
+#                tipo_id = int(self.data.get('tipo'))
+#                self.fields['condicion'].queryset = Condicion.objects.filter(tipo_id=tipo_id)
+#            except:
+#                pass
+#        elif self.instance.pk and self.instance.tipo:
+#            self.fields['condicion'].queryset = self.instance.tipo.condiciones.all()
+#        else:
+#            self.fields['condicion'].queryset = Condicion.objects.none()

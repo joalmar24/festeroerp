@@ -8,6 +8,11 @@
         {% csrf_token %}
 
         <div class="mb-3">
+            {{ form.numero_festero.label_tag }}
+            {{ form.numero_festero }}
+        </div>
+
+        <div class="mb-3">
             {{ form.nombre.label_tag }}
             {{ form.nombre }}
         </div>
@@ -55,9 +60,6 @@
 
 {% endblock %}
 {% block scripts %}
-<script>
-console.log("SCRIPT CARGADO");
-</script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
