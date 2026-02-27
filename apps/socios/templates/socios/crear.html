@@ -8,6 +8,11 @@
         {% csrf_token %}
 
         <div class="mb-3">
+            {{ form.numero_festero.label_tag }}
+            {{ form.numero_festero }}
+        </div>
+
+        <div class="mb-3">
             {{ form.nombre.label_tag }}
             {{ form.nombre }}
         </div>
@@ -31,6 +36,16 @@
             {{ form.telefono.label_tag }}
             {{ form.telefono }}
         </div>
+        
+        <div class="mb-3">
+        {{ form.tipo.label_tag }}
+        {{ form.tipo }}
+        </div>
+
+        <div class="mb-3" id="condicion-wrapper">
+            {{ form.condicion.label_tag }}
+            {{ form.condicion }}
+        </div>
 
         <div class="form-check mb-3">
             {{ form.estado }}
@@ -43,4 +58,57 @@
     </form>
 </div>
 
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const tipoSelect = document.getElementById("id_tipo");
+    const condicionSelect = document.getElementById("id_condicion");
+    const condicionWrapper = document.getElementById("condicion-wrapper");
+
+    function cargarCondiciones(tipoId) {
+
+        if (!tipoId) {
+            condicionWrapper.style.display = "none";
+            condicionSelect.innerHTML = "";
+            return;
+        }
+
+        fetch(`/ajax/cargar-condiciones/?tipo_id=${tipoId}`)
+            .then(response => response.json())
+            .then(data => {
+
+                condicionSelect.innerHTML = "";
+
+                if (data.length === 0) {
+                    condicionWrapper.style.display = "none";
+                } else {
+                    condicionWrapper.style.display = "block";
+
+                    const emptyOption = document.createElement("option");
+                    emptyOption.text = "---------";
+                    emptyOption.value = "";
+                    condicionSelect.add(emptyOption);
+
+                    data.forEach(condicion => {
+                        const option = document.createElement("option");
+                        option.value = condicion.id;
+                        option.text = condicion.nombre;
+                        condicionSelect.add(option);
+                    });
+                }
+
+            });
+    }
+
+    // Ocultar al cargar la página
+    condicionWrapper.style.display = "none";
+
+    tipoSelect.addEventListener("change", function() {
+        cargarCondiciones(this.value);
+    });
+
+});
+</script>
 {% endblock %}

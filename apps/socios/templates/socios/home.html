@@ -1,68 +1,109 @@
-{% extends 'base.html' %}
-{% block content %}
+    {% extends 'base.html' %}
+    {% block content %}
 
-<div class="container my-4">
-    <h2 class="mb-4">Listado de socios</h2>
-    <!-- 👇 Botón de alta -->
-    <a href="{% url 'crear_socio' %}" class="btn btn-success mb-3">
-        + Nuevo socio
-    </a>
-    <!-- Tabla para desktop -->
-    <div class="table-responsive d-none d-md-block">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>DNI</th>
-                    <th>Email</th>
-                    <th>Estado</th>
-                    <th>Alta</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for socio in socios %}
-                <tr>
-                    <td>{{ socio.nombre }}</td>
-                    <td>{{ socio.apellidos }}</td>
-                    <td>{{ socio.dni }}</td>
-                    <td>{{ socio.email }}</td>
-                    <td>
+    <div class="container my-4">
+        <h2 class="mb-4">Listado de socios</h2>
+        <!-- 👇 Botón de alta -->
+        <a href="{% url 'crear_socio' %}" class="btn btn-success mb-3">
+            + Nuevo socio
+        </a>
+        <!-- Tabla para desktop -->
+        <div class="table-responsive d-none d-md-block">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nº Festero</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>DNI</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Condición</th>
+                        <th>Estado</th>
+                        <th>Alta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for socio in socios %}
+                    <tr>
+                        <td>{{ socio.numero_festero }}</td>
+                        <td>{{ socio.nombre }}</td>
+                        <td>{{ socio.apellidos }}</td>
+                        <td>{{ socio.dni }}</td>
+                        <td>{{ socio.email }}</td>
+                        <td>{{ socio.tipo.nombre }}</td>
+                        <td>{{ socio.condicion.nombre }}</td>
+                        <td>
+                            {% if socio.estado %}
+                            <span class="badge bg-success">Activo</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Baja</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ socio.fecha_alta }}</td>
+                        <td>
+                        <a href="{% url 'editar_socio' socio.id %}" 
+                        class="btn btn-sm btn-warning">
+                        Editar
+                        </a>
+
+                        <a href="{% url 'baja_socio' socio.id %}" 
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Dar de baja a este socio?')">
+                        Baja
+                        </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cards para móvil -->
+        <div class="d-md-none">
+            {% for socio in socios %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ socio.nombre }} {{ socio.apellidos }}</h5>
+                    <p class="card-text">
+                        <strong>DNI:</strong> {{ socio.dni }}<br>
+                        <strong>Email:</strong> {{ socio.email }}<br>
+                        <strong>Tipo:</strong> 
+                        <span class="badge bg-info">
+                        {{ socio.tipo.nombre }}
+                        </span><br>
+                        <strong>Condición2:</strong>{% if socio.condicion %}
+                        <span class="badge bg-warning text-dark">
+                        {{ socio.condicion.nombre }}
+                        </span>
+                        {% endif %}<br>
+                        <strong>Estado:</strong>
                         {% if socio.estado %}
                         <span class="badge bg-success">Activo</span>
                         {% else %}
                         <span class="badge bg-secondary">Baja</span>
                         {% endif %}
-                    </td>
-                    <td>{{ socio.fecha_alta }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Cards para móvil -->
-    <div class="d-md-none">
-        {% for socio in socios %}
-        <div class="card mb-3 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">{{ socio.nombre }} {{ socio.apellidos }}</h5>
-                <p class="card-text">
-                    <strong>DNI:</strong> {{ socio.dni }}<br>
-                    <strong>Email:</strong> {{ socio.email }}<br>
-                    <strong>Estado:</strong>
-                    {% if socio.estado %}
-                    <span class="badge bg-success">Activo</span>
-                    {% else %}
-                    <span class="badge bg-secondary">Baja</span>
-                    {% endif %}
-                </p>
-                <small class="text-muted">Alta: {{ socio.fecha_alta }}</small>
+                    </p>
+                    <small class="text-muted">Alta: {{ socio.fecha_alta }}</small>
+                    <div class="mt-2">
+                        <a href="{% url 'editar_socio' socio.id %}" 
+                        class="btn btn-sm btn-warning">
+                            Editar
+                        </a>
+                        {% if socio.estado %}
+                        <a href="{% url 'baja_socio' socio.id %}" 
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Dar de baja a este socio?')">
+                            Baja
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+
     </div>
 
-</div>
-
-{% endblock %}
+    {% endblock %}
